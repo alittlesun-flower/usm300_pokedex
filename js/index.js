@@ -15,11 +15,81 @@ tinymce.init({
     content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
   });
   
+  const pokemones = []; //definir arreglo en javascript
+  const cargarTabla = ()=>{
+
+    //1, Obtener una referencia a la tabla
+    let tbody = document.querySelector("#tbody-tabla");
+    //Eliminar el contenido del tbody
+    tbody.innerHTML = "";
+    //2. recorrer la lista de pokemon
+    for(let i=0; i <pokemones.length; ++i){
+      let p = pokemones[i];
+      //3. por cada pokemon generar una fila de la tabla (tr)
+      let tr = document.createElement("tr");
+      //4. por cada atributo generar un td de la tabla
+      let tdNro = document.createElement("td");
+      let tdNombre = document.createElement("td");
+      let tdTipo = document.createElement("td");
+      let tdDescripcion = document.createElement("td");
+      let tdAcciones = document.createElement("td");
+
+      //definir lo que va ne la tabla
+      tdNro.innerText = i+1;
+      tdNombre.innerText = p.nombre;
+      //TODO: El tipo tiene que ser un icono
+      let tipo = document.createElement("i");
+      if(p.tipo == "1"){
+        //planta <i class="fas fa-leaf"></i>
+        tipo.classList.add("fas", "fa-leaf","text-success", "fa-3x");
+      }else if(p.tipo == "2"){
+        //<i class="fas fa-fire"></i>
+        tipo.classList.add("fas", "fa-fire","text-danger", "fa-3x");
+      }else if(p.tipo == "3"){
+        //<i class="fas fa-bolt"></i>
+        tipo.classList.add("fas", "fa-bolt","text-warning", "fa-3x");
+      }else if(p.tipo == "4"){
+       //<i class="fas fa-tint"></i>
+       tipo.classList.add("fas", "fa-tint","text-primary", "fa-3x");
+      }else {
+        //<i class="fas fa-bullseye"></i>
+        tipo.classList.add("fas", "fa-bullseye","text-info", "fa-3x");
+      }
+      tdTipo.classList.add("text-center")
+      tdTipo.appendChild(tipo);
+      //Cuando quiero agregar un elemento dentro de otro: appendChild
+      //Cuando quiero definir texto, innerText
+      //Cuando quiero definir directamente el html, innerHTML
+      //TODO: Arreglar descripcion HECHO
+      tdDescripcion.innerHTML = p.descripcion;
+      //TODO: Que hago con las acciones!
+      //5. agregar los td al tr
+      tr.appendChild(tdNro);
+      tr.appendChild(tdNombre);
+      tr.appendChild(tdTipo);
+      tr.appendChild(tdDescripcion);
+      tr.appendChild(tdAcciones);
+      //6. agregar el tr a la tabla
+      tbody.appendChild(tr);
+    }
+
+  }
   
   document.querySelector("#registrar-btn").addEventListener("click", ()=>{
     let nombre = document.querySelector("#nombre-txt").value;
     let tipo = document.querySelector("#tipo-select").value;
     let legendario = document.querySelector("#legendario-si").checked;
     let descripcion = tinymce.get("descripcion-txt").getContent();
-    console.log("Hola Mundo!", nombre, " ", tipo, " ", legendario, " ", descripcion);
+    //objeto, se le pueden añadir propiedades dinamicas
+    let pokemon = {}; 
+    //crea un atributos: numero letras funciones elementos html
+    pokemon.nombre = nombre;
+    pokemon.tipo = tipo;
+    pokemon.legendario = legendario;
+    pokemon.descripcion = descripcion;
+
+    pokemones.push(pokemon); //como el append de python
+    cargarTabla();
+    Swal.fire("Resultado exitoso!", "Pokemon registrado", "info");
+
   } );
