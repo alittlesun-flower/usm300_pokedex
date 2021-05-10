@@ -14,7 +14,26 @@ tinymce.init({
     'removeformat | help',
     content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
   });
-  
+  const enviarProfeOak = async function(){
+    //siempre this me devuelve una referencia al elemento que llamó a la función
+    //en este caso es el boton
+    let nro = this.nro;
+    let res = await Swal.fire({
+      title:"Desea realmente continuar?",
+      text: "Esta intentando enviar el pokemon al profesor oak, esto no se puede revertir",
+      icon: "warning",
+      showCancelButton:true.valueOf,
+      confirmButtonText:"Si! hazlo!"
+    })
+    if(res.isConfirmed){
+      pokemones.splice(nro,1);
+      cargarTabla();
+      Swal.fire("Pokemon descartado", "Pokemon enviado al profesor", "info");
+    }else{
+      Swal.fire("Cancelado", "Operacion cancelada", "error");
+    }
+
+  };
   const pokemones = []; //definir arreglo en javascript
   const cargarTabla = ()=>{
 
@@ -62,6 +81,17 @@ tinymce.init({
       //Cuando quiero definir directamente el html, innerHTML
       //TODO: Arreglar descripcion HECHO
       tdDescripcion.innerHTML = p.descripcion;
+
+      let boton = document.createElement("button");
+      boton.classList.add("btn", "btn-danger");
+      boton.innerText = "Enviar al profesor oak";
+
+      boton.nro = i;
+      tdAcciones.appendChild(boton);
+      tdAcciones.classList.add("text-center");
+
+      boton.addEventListener("click",enviarProfeOak);
+
       //TODO: Que hago con las acciones!
       //5. agregar los td al tr
       tr.appendChild(tdNro);
